@@ -1,0 +1,79 @@
+{
+  "endpoint": "/v1/chat/completions",
+  "model": "GPT-4.1",
+  "temperature": 0.7,
+  "stream": true,
+  "messages": [
+    {
+      "role": "user",
+      "content": "Tell me a joke about computers."
+    },
+    {
+      "role": "assistant",
+      "content": "Why did the computer show up at work late? It had a hard drive!"
+    }
+  ],
+  "max_tokens": 256,
+  "top_p": 0.95,
+  "stop_sequences": ["\nUser:", "\nAssistant:"],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "getWeather",
+        "description": "Gets the current weather for a given city.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "The name of the city"
+            }
+          },
+          "required": ["city"]
+        }
+      }
+    }
+  ],
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {
+          "text": "What's the weather like in Tokyo?"
+        }
+      ]
+    }
+  ],
+  "safety_settings": [
+    {
+      "category": "harm",
+      "threshold": "block_low"
+    },
+    {
+      "category": "violence",
+      "threshold": "block_medium"
+    }
+  ],
+  "generation_config": {
+    "temperature": 0.8,
+    "top_p": 0.9,
+    "top_k": 40,
+    "candidate_count": 1,
+    "max_output_tokens": 512,
+    "stop_sequences": ["\n"]
+  },
+  "frequency_penalty": 0.1,
+  "presence_penalty": 0.3,
+  "n": 1,
+  "response_format": {
+    "type": "json"
+  },
+  "seed": 42,
+  "tool_choice": "auto",
+  "user": "user-1234",
+  "logprobs": false,
+  "top_logprobs": 5,
+  "system": "You are a helpful assistant.",
+  "top_k": 50
+}

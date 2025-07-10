@@ -1,0 +1,12 @@
+{
+  "provider": "openai",
+  "model": "GPT-4.1",
+  "role": "assistant",
+  "content": "The weather in Tokyo is currently sunny with a high of 28°C and a low of 21°C.",
+  "usage": {
+    "input_tokens": 42,
+    "output_tokens": 57,
+    "total_tokens": 99
+  },
+  "finish_reason": "stop"
+}
