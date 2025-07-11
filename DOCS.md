@@ -90,7 +90,14 @@ The following models are supported and can be used in the `model` parameter of y
 *   `GPT-4.1-Mini`
 *   `GPT-4.1-Nano`
 *   `GPT-o3`
+*   `GPT-o3-pro`
+*   `GPT-o3-DeepResearch`
+*   `GPT-o3-Mini`
 *   `GPT-o4-mini`
+*   `GPT-4o`
+*   `GPT-4o-mini`
+*   `GPT-o1`
+*   `GPT-o1-Mini`
 *   `Opus-4`
 *   `Sonnet-4`
 *   `Haiku-3.5`
