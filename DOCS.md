@@ -16,8 +16,9 @@ Authorization: Bearer YOUR_API_KEY
 ---
 
 ## API Endpoint
+**Do note that streaming is not supported**
 
-### `POST /v1/chat/completions`
+### `POST /api`
 
 This is the primary endpoint for interacting with the language models. It allows you to send a chat conversation and receive a response from the specified model.
 
