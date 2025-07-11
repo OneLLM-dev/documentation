@@ -240,10 +240,9 @@ paths:
                     type: string
                     example: stop
       security:
-        - ApiKeyAuth: []
+        - BearerAuth: []
 components:
   securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+    BearerAuth:
+      type: http
+      scheme: bearer

@@ -6,11 +6,11 @@ Welcome to the official API documentation for OneLLM.dev. This document provides
 
 The OneLLM.dev API uses API keys for authentication. You can obtain your API key from the [OneLLM.dev dashboard](https://onellm.dev).
 
-All API requests must include an `Authorization` header containing your API key.
+All API requests must include an `Authorization` header with a Bearer token containing your API key.
 
 **Example Header:**
 ```
-Authorization: YOUR_API_KEY
+Authorization: Bearer YOUR_API_KEY
 ```
 
 ---
