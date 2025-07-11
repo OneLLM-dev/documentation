@@ -1,0 +1,249 @@
+openapi: 3.0.0
+info:
+  title: OneLLM.dev API
+  version: 1.0.0
+  description: This is the official API documentation for OneLLM.dev.
+servers:
+  - url: https://onellm.dev
+    description: Main API server
+paths:
+  /v1/chat/completions:
+    post:
+      summary: Send a chat request to a large language model.
+      description: Send a chat request to one of the supported large language models.
+      operationId: chatCompletions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                endpoint:
+                  type: string
+                  example: /v1/chat/completions
+                model:
+                  type: string
+                  enum:
+                    - GPT-4.1
+                    - GPT-4.1-Mini
+                    - GPT-4.1-Nano
+                    - GPT-o3
+                    - GPT-o4-mini
+                    - Opus-4
+                    - Sonnet-4
+                    - Haiku-3.5
+                    - Opus-3
+                    - Sonnet-3.7
+                    - Haiku-3
+                    - DeepSeek-Reasoner
+                    - DeepSeek-Chat
+                    - 2.5-Flash-preview
+                    - 2.5-Pro-preview
+                    - 2.0-Flash
+                    - 2.0-Flash-lite
+                    - 1.5-Flash
+                    - 1.5-Flash-8B
+                    - 1.5-Pro
+                temperature:
+                  type: number
+                  format: float
+                  example: 0.7
+                stream:
+                  type: boolean
+                  example: true
+                messages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      role:
+                        type: string
+                        enum: [user, assistant]
+                      content:
+                        type: string
+                max_tokens:
+                  type: integer
+                  example: 256
+                top_p:
+                  type: number
+                  format: float
+                  example: 0.95
+                stop_sequences:
+                  type: array
+                  items:
+                    type: string
+                  example: ["\nUser:", "\nAssistant:"]
+                tools:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        example: function
+                      function:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: getWeather
+                          description:
+                            type: string
+                            example: Gets the current weather for a given city.
+                          parameters:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                                example: object
+                              properties:
+                                type: object
+                                properties:
+                                  city:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: string
+                                      description:
+                                        type: string
+                                        example: The name of the city
+                              required:
+                                type: array
+                                items:
+                                  type: string
+                                  example: city
+                contents:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      role:
+                        type: string
+                        example: user
+                      parts:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            text:
+                              type: string
+                              example: "What's the weather like in Tokyo?"
+                safety_settings:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      category:
+                        type: string
+                        example: harm
+                      threshold:
+                        type: string
+                        example: block_low
+                generation_config:
+                  type: object
+                  properties:
+                    temperature:
+                      type: number
+                      format: float
+                      example: 0.8
+                    top_p:
+                      type: number
+                      format: float
+                      example: 0.9
+                    top_k:
+                      type: integer
+                      example: 40
+                    candidate_count:
+                      type: integer
+                      example: 1
+                    max_output_tokens:
+                      type: integer
+                      example: 512
+                    stop_sequences:
+                      type: array
+                      items:
+                        type: string
+                        example: ["\n"]
+                frequency_penalty:
+                  type: number
+                  format: float
+                  example: 0.1
+                presence_penalty:
+                  type: number
+                  format: float
+                  example: 0.3
+                n:
+                  type: integer
+                  example: 1
+                response_format:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      example: json
+                seed:
+                  type: integer
+                  example: 42
+                tool_choice:
+                  type: string
+                  example: auto
+                user:
+                  type: string
+                  example: user-1234
+                logprobs:
+                  type: boolean
+                  example: false
+                top_logprobs:
+                  type: integer
+                  example: 5
+                system:
+                  type: string
+                  example: You are a helpful assistant.
+                top_k:
+                  type: integer
+                  example: 50
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  provider:
+                    type: string
+                    example: openai
+                  model:
+                    type: string
+                    example: GPT-4.1
+                  role:
+                    type: string
+                    example: assistant
+                  content:
+                    type: string
+                    example: The weather in Tokyo is currently sunny with a high of 28°C and a low of 21°C.
+                  usage:
+                    type: object
+                    properties:
+                      input_tokens:
+                        type: integer
+                        example: 42
+                      output_tokens:
+                        type: integer
+                        example: 57
+                      total_tokens:
+                        type: integer
+                        example: 99
+                  finish_reason:
+                    type: string
+                    example: stop
+      security:
+        - ApiKeyAuth: []
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
