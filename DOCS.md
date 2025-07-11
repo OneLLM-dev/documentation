@@ -106,8 +106,6 @@ The following models are supported and can be used in the `model` parameter of y
 *   `1.5-Flash-8B`
 *   `1.5-Pro`
 
-> **Note:** Gemini support is currently unavailable due to a different API output response format.
-
 ---
 
 ## Important Notes
