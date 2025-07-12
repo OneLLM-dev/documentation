@@ -113,6 +113,23 @@ The following models are supported and can be used in the `model` parameter of y
 *   `1.5-Flash`
 *   `1.5-Flash-8B`
 *   `1.5-Pro`
+*   `Mistral-Medium-3`
+*   `Magistral-Medium`
+*   `Codestral`
+*   `Devstral-Medium`
+*   `Mistral-Saba`
+*   `Mistral-Large`
+*   `Pixtral-Large`
+*   `Ministral-8B-24.10`
+*   `Ministral-3B-24.10`
+*   `Mistral-Small-3.2`
+*   `Magistral-Small`
+*   `Devstral-Small`
+*   `Pixtral-12B`
+*   `Mistral-NeMo`
+*   `Mistral-7B`
+*   `Mixtral-8x7B`
+*   `Mixtral-8x22B`
 
 ---
 
