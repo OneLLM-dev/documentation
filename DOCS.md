@@ -102,7 +102,7 @@ The API may return different error codes. Common ones are:
 Please be sure to check the response body for extra error detail. If you encounter a error you cannot debug, please be sure to join our [Discord Support server](https://discord.gg/4xY47qP88Z).
 
 # Important Notes
--   **Streaming is not supported.** Always send complete requests.
+-   **Streaming is not supported.** The model sends complete response for now. But we do have someone working on it, so it won't be long before this feature is implemented.
     
 -   `max_tokens` will **auto-adjust** if it’s larger than your allowed balance.
     
