@@ -1,70 +1,60 @@
-# OneLLM.dev API Documentation
+# OneLLM.dev API documentation
+Welcome to the official OneLLM.dev API documentation! Here you will find:
 
-Welcome to the official API documentation for OneLLM.dev. This document provides a comprehensive guide to interacting with our API. For a formal definition of the API, please refer to the [OpenAPI Specification](openapi.yaml).
+## Table of Contents
+- [Authentication](#authentication)  
+- [API Endpoint](#api-endpoint)  
+- [Request Body](#request-body)  
+- [Example](#example)  
+- [Supported Models](#models)  
+- [Error Handling](#error-handling)  
+- [Important Notes](#important-notes)  
+ 
+It is advised to properly read and understand the documentation before going ahead and making your product. Best of luck!
 
-## Authentication
+--------------
+# Authentication
+All the API requests require an **API Key**. Get your API key at [OneLLM dashboard](https://onellm.dev/) after logging in.
 
-The OneLLM.dev API uses API keys for authentication. You can obtain your API key from the [OneLLM.dev dashboard](https://onellm.dev).
-
-All API requests must include an `Authorization` header with a Bearer token containing your API key.
-
-**Example Header:**
+Include the key in the `Authorization` header as a Bearer token:
+```http
+Authorization: Bearer $APIKEY
 ```
-Authorization: Bearer YOUR_API_KEY
-```
+> An API key is a unique identifier used to authenticate and authorize a user or application when accessing an API (Application Programming Interface). It acts like a password, allowing the API to verify that the request is coming from a legitimate source.
 
----
-
-## API Endpoint
-**Do note that streaming is not supported**
-
-### `POST /api`
-
+ 
+------ 
+# API Endpoint
+The BASE_URL for the API is `https://onellm.dev/api`.
 This is the primary endpoint for interacting with the language models. It allows you to send a chat conversation and receive a response from the specified model.
+`POST https://onellm.dev/api`
+**Note:** Streaming responses are **not supported**. Do not include a `stream` parameter.
+## Request Body
+All the requests must be a JSON object with the following fields:
 
-#### Request Body
+| Parameter | Type | Required | Description|
+| -------------|---------------|--------------------|-------------|
+| Model | String | Yes | The model ID to use for the request. See [Supported Models](#models) for model information. |
+| Messages | Array | Yes | Conversation history as an array of message objects. Each object requires `role` and `content`. See an [example](#example). |
+| Temperature | Number | No | Controls randomness. 0-2, with 0 being too deterministic and 2 being very random. Default is 1. | 
+| Max_tokens | Integer | No | Maximum number of tokens to generate. Server adjusts automatically if it exceeds your balance. |
+| top_p | Number | No | Nucleus sampling probability (0–1). Controls diversity. |
+| stop_sequences | Array | No | Strings that will cause the model to stop generating tokens. |
 
-The request body must be a JSON object containing the details of your request.
+To view more parameters, please go visit the [OpenAPI specifications](https://github.com/OneLLM-dev/documentation/blob/main/openapi.yaml).
 
-| Parameter | Type | Description |
-|---|---|---|
-| `model` | string | **Required.** The ID of the model to use for the completion. See the [Supported Models](#supported-models) section for a list of available models. |
-| `messages` | array | **Required.** An array of message objects representing the conversation history. |
-| `temperature` | number | Optional. Controls randomness. A lower value makes the model more deterministic. Range: 0.0 to 2.0. |
-| `max_tokens` | integer | Optional. The maximum number of tokens to generate in the response. If the value is too large, it will be automatically adjusted based on your account balance. |
-| `stream` | boolean | Optional. If set to `true`, the response will be streamed as server-sent events. Defaults to `false`. |
-| `top_p` | number | Optional. The nucleus sampling probability. The model considers the results of the tokens with `top_p` probability mass. |
-| `stop_sequences`| array | Optional. A list of strings that will cause the model to stop generating tokens. |
-| `...and more` | | For a complete list of all possible request parameters, please refer to the [OpenAPI Specification](openapi.yaml). |
-
-**Example Request:**
+# Example
+Example request:
 ```json
 {
   "model": "GPT-4.1",
   "messages": [
-    {
-      "role": "user",
-      "content": "Tell me a joke about computers."
-    }
+    { "role": "user", "content": "Tell me a joke about computers." }
   ],
   "max_tokens": 50
 }
 ```
-
-#### Response Body
-
-The response will be a JSON object containing the model's output.
-
-| Parameter | Type | Description |
-|---|---|---|
-| `provider` | string | The name of the underlying model provider (e.g., `openai`). |
-| `model` | string | The model that was used for the completion. |
-| `role` | string | The role of the message author, typically `assistant`. |
-| `content` | string | The content of the message generated by the model. |
-| `usage` | object | An object containing token usage information for the request. |
-| `finish_reason`| string | The reason the model stopped generating tokens (e.g., `stop`). |
-
-**Example Response:**
+Example response:
 ```json
 {
   "provider": "openai",
@@ -72,70 +62,63 @@ The response will be a JSON object containing the model's output.
   "role": "assistant",
   "content": "Why did the computer show up at work late? It had a hard drive!",
   "usage": {
-    "input_tokens": 15,
-    "output_tokens": 12,
-    "total_tokens": 27
+    "input_tokens": 7,
+    "output_tokens": 16,
+    "total_tokens": 23
   },
   "finish_reason": "stop"
 }
 ```
+# Models
 
----
+Available model IDs (use in `model` field):
 
-## Supported Models
+-   **GPT Series**: GPT-5, GPT-5-Mini, GPT-5-Nano, GPT-5-Chat-Latest, GPT-4.1, GPT-4.1-Mini, GPT-4.1-Nano, GPT-o3, GPT-o3-pro, GPT-o3-DeepResearch, GPT-o3-Mini, GPT-o4-mini, GPT-4o, GPT-4o-mini, GPT-o1, GPT-o1-Mini
+    
+-   **Anthropic (Claude-like)**: Opus-4, Sonnet-4, Haiku-3.5, Opus-3, Sonnet-3.7, Haiku-3
+    
+-   **DeepSeek**: DeepSeek-Reasoner, DeepSeek-Chat
+    
+-   **Flash/Preview**: 2.5-Flash-preview, 2.5-Pro-preview, 2.0-Flash, 2.0-Flash-lite, 1.5-Flash, 1.5-Flash-8B, 1.5-Pro
+    
+-   **Mistral & Variants**: Mistral-Medium-3, Magistral-Medium, Codestral, Devstral-Medium, Mistral-Saba, Mistral-Large, Pixtral-Large, Ministral-8B-24.10, Ministral-3B-24.10, Mistral-Small-3.2, Magistral-Small, Devstral-Small, Pixtral-12B, Mistral-NeMo, Mistral-7B, Mixtral-8x7B, Mixtral-8x22B
 
-The following models are supported and can be used in the `model` parameter of your API requests:
+ 
+# Error Handling 
 
-*   `GPT-4.1`
-*   `GPT-4.1-Mini`
-*   `GPT-4.1-Nano`
-*   `GPT-o3`
-*   `GPT-o3-pro`
-*   `GPT-o3-DeepResearch`
-*   `GPT-o3-Mini`
-*   `GPT-o4-mini`
-*   `GPT-4o`
-*   `GPT-4o-mini`
-*   `GPT-o1`
-*   `GPT-o1-Mini`
-*   `Opus-4`
-*   `Sonnet-4`
-*   `Haiku-3.5`
-*   `Opus-3`
-*   `Sonnet-3.7`
-*   `Haiku-3`
-*   `DeepSeek-Reasoner`
-*   `DeepSeek-Chat`
-*   `2.5-Flash-preview`
-*   `2.5-Pro-preview`
-*   `2.0-Flash`
-*   `2.0-Flash-lite`
-*   `1.5-Flash`
-*   `1.5-Flash-8B`
-*   `1.5-Pro`
-*   `Mistral-Medium-3`
-*   `Magistral-Medium`
-*   `Codestral`
-*   `Devstral-Medium`
-*   `Mistral-Saba`
-*   `Mistral-Large`
-*   `Pixtral-Large`
-*   `Ministral-8B-24.10`
-*   `Ministral-3B-24.10`
-*   `Mistral-Small-3.2`
-*   `Magistral-Small`
-*   `Devstral-Small`
-*   `Pixtral-12B`
-*   `Mistral-NeMo`
-*   `Mistral-7B`
-*   `Mixtral-8x7B`
-*   `Mixtral-8x22B`
+The API may return different error codes. Common ones are:
 
----
+| Status Code | Meaning | Reason |
+| ---------|------------------|----------|
+| 400 | Bad Request | Invalid JSON or missing required fields. |
+| 401 | Unauthorized | API key missing or invalid. | 
+|403 | Forbidden | You don't have access to the requested resource |
+| 404 | Not Found | Invalid Endpoint. | 
+| 405 | Method not allowed | Endpoint does not support the HTTP method used. |
+| 422 | Unprocessable Entity | Invalid type or format in the request body. |
+| 429 | Too Many Requests | Rate limit exceeded. Try again later. |
+| 500 | Internal Server Error | Something went wrong on the server side. |
 
-## Important Notes
+Please be sure to check the response body for extra error detail. If you encounter a error you cannot debug, please be sure to join our [Discord Support server](https://discord.gg/4xY47qP88Z).
 
-*   If the `max_tokens` field's value is too large, the server will automatically set it to the highest amount that your balance allows.
-*   A minimum balance of **USD $0.10** is required to make API requests.
+# Important Notes
+-   **Streaming is not supported.** The model sends complete response for now. But we do have someone working on it, so it won't be long before this feature is implemented.
+    
+-   `max_tokens` will **auto-adjust** if it’s larger than your allowed balance.
+    
+-   A **minimum balance of $0.10** is required to make API requests.
+    
+-   The response includes `usage` info:
+    
+    -   `input_tokens`: number of tokens sent in the request.
+        
+    -   `output_tokens`: number of tokens generated by the model.
+        
+    -   `total_tokens`: combined count of both.
+        
 
----
+
+
+
+
+
